@@ -1,7 +1,7 @@
 import tkinter
 import customtkinter
 import yt_dlp
-from pytube import YouTube
+import threading
 
 
 def download_video():
@@ -12,12 +12,17 @@ def download_video():
             "subtitleslangs": ["en"],
             "outtmpl": "%(title)s.%(ext)s",
         }
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([ytLink])
-        customtkinter.CTkLabel(
-            master=app, text="Downloaded successfully", font=("Roboto", 16, "bold")
-        ).pack(pady=12, padx=10)
-        print("Downloaded successfully")
+
+        def download_video_thread():
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([ytLink])
+            customtkinter.CTkLabel(
+                master=app, text="Downloaded successfully", font=("Roboto", 16, "bold")
+            ).pack(pady=12, padx=10)
+            print("Downloaded successfully")
+
+        thread = threading.Thread(target=download_video_thread)
+        thread.start()
     except Exception as e:
         print(f"Download failed: {e}")
         customtkinter.CTkLabel(
