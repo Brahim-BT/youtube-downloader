@@ -4,6 +4,29 @@ import yt_dlp
 import threading
 
 
+def show_download_status(message, success=True):
+    status_window = customtkinter.CTkToplevel(app)
+    status_window.title("Download Status")
+    if success:
+        status_label = customtkinter.CTkLabel(
+            master=status_window,
+            text=message,
+            font=("Roboto", 16, "bold"),
+            text_color="green",
+        )
+    else:
+        status_label = customtkinter.CTkLabel(
+            master=status_window,
+            text=message,
+            font=("Roboto", 16, "bold"),
+            text_color="red",
+        )
+    status_label.pack(pady=12, padx=10)
+    status_window.after(
+        10000, lambda: status_window.destroy()
+    )  # Close the window after 10 seconds
+
+
 def download_video():
     try:
         ytLink = url.get()
@@ -16,18 +39,12 @@ def download_video():
         def download_video_thread():
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([ytLink])
-            customtkinter.CTkLabel(
-                master=app, text="Downloaded successfully", font=("Roboto", 16, "bold")
-            ).pack(pady=12, padx=10)
-            print("Downloaded successfully")
+            show_download_status("Video downloaded successfully!", success=True)
 
         thread = threading.Thread(target=download_video_thread)
         thread.start()
     except Exception as e:
-        print(f"Download failed: {e}")
-        customtkinter.CTkLabel(
-            master=app, text="Error Downloading Video", font=("Roboto", 16, "bold")
-        ).pack(pady=12, padx=10)
+        show_download_status(f"Failed to download video: {e}", success=False)
 
 
 # creating tkinter window
