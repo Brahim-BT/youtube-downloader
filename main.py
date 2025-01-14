@@ -2,6 +2,19 @@ import tkinter
 import customtkinter
 import yt_dlp
 import threading
+import os
+import sys
+
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 def show_download_status(message, success=True):
@@ -53,6 +66,7 @@ customtkinter.set_default_color_theme("dark-blue")
 
 # Our app frame
 app = customtkinter.CTk()
+app.iconbitmap(resource_path("youtube-icon.ico"))
 app.geometry("720x480")
 app.title("Youtube Downloader")
 
