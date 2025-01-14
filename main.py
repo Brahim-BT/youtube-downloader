@@ -47,6 +47,7 @@ def download_video():
             "format": "bestvideo+bestaudio",
             "subtitleslangs": ["en"],
             "outtmpl": "%(title)s.%(ext)s",
+            "ffmpeg_location": resource_path("ffmpeg.exe"),  # Include FFmpeg path
         }
 
         def download_video_thread():
